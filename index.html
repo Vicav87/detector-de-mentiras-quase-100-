@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Analisador Acadêmico</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="particles"></div>
+    <div class="container">
+        <h1>Analisador Linguístico</h1>
+        <p class="subtitle">Análise semântica e estabilidade narrativa</p>
+        <textarea id="textInput" placeholder="Cole seu texto acadêmico aqui..."></textarea>
+        <button id="btnAnalisar" onclick="analisarTexto()">Analisar Texto</button>
+        <div id="resultado" class="resultado" style="display:none;"></div>
+    </div>
+
+    <script>
+    async function analisarTexto() {
+        const texto = document.getElementById("textInput").value;
+        const btn = document.getElementById("btnAnalisar");
+        const resDiv = document.getElementById("resultado");
+
+        if (!texto) return alert("Por favor, digite um texto.");
+
+        btn.innerText = "Processando IA...";
+        btn.disabled = true;
+
+        try {
+            const response = await fetch("/analisar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ texto })
+            });
+            const data = await response.json();
+
+            resDiv.style.display = "block";
+            resDiv.innerHTML = `
+                <h3>Resultado da Análise</h3>
+                <p><strong>Índice de Incerteza:</strong> ${data.incerteza}%</p>
+                <p><strong>Complexidade Sintática:</strong> ${data.complexidade}</p>
+                <p><strong>Consistência Narrativa:</strong> ${data.consistencia}</p>
+                <p><strong>Observação:</strong> ${data.observacao}</p>
+            `;
+        } catch (e) {
+            alert("Erro ao conectar com o servidor.");
+        } finally {
+            btn.innerText = "Analisar Texto";
+            btn.disabled = false;
+        }
+    }
+    </script>
+</body>
+</html>

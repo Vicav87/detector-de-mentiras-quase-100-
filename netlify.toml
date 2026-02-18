@@ -2,11 +2,13 @@
   publish = "."
 
 [functions]
+  node_bundler = "esbuild"
+
+# Nova sintaxe para o Python no Netlify Noble
+[functions."*"]
   python_version = "3.9"
 
-# Esse bloco abaixo é o que resolve o "Erro de Conexão"
 [[redirects]]
   from = "/analisar"
   to = "/.netlify/functions/analisar"
   status = 200
-  
